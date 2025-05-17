@@ -19,7 +19,7 @@
 
 ## ディレクトリ構成
 
-ecs-fargate-docker-flask-rds-iac/
+```ecs-fargate-docker-flask-rds-iac/
 │
 ├── environments/
 │ └── dev/
@@ -40,7 +40,7 @@ ecs-fargate-docker-flask-rds-iac/
 │ └── requirements.txt
 │
 └── .gitignore
-└── README.md
+└── README.md```
 
 
 ---
