@@ -40,7 +40,8 @@ ecs-fargate-docker-flask-rds-iac/
 │ └── requirements.txt
 │
 └── .gitignore
-└── README.md```
+└── README.md
+```
 
 
 ---
