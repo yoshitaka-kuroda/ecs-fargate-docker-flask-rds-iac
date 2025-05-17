@@ -17,9 +17,9 @@
 
 ---
 
-## ディレクトリ構成
+```## ディレクトリ構成
 
-```ecs-fargate-docker-flask-rds-iac/
+ecs-fargate-docker-flask-rds-iac/
 │
 ├── environments/
 │ └── dev/
