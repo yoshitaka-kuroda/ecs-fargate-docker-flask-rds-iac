@@ -54,9 +54,9 @@ Terraform（IaC管理）
   - RDS（DB）
   - Security Group（ファイアウォール）
   - Terraformの状態ファイル（tfstate）はS3バケットで一元管理し、クラウドリソース構成を安全かつ自動でバックアップ
-　- ECR（Elastic Container Registry）に独自Dockerイメージをpush
-　- Python FlaskによるWeb API/アプリをサンプル実装
-　- ALB経由でインターネット公開
+- ECR（Elastic Container Registry）に独自Dockerイメージをpush
+- Python FlaskによるWeb API/アプリをサンプル実装
+- ALB経由でインターネット公開
 
 
 ---
