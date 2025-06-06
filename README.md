@@ -1,4 +1,4 @@
-# AWS本番Web基盤フル自動構築（Terraform／ECS Fargate＋ALB＋RDS＋ECR＋VPC＋Flask）
+# AWSWeb基盤フル自動構築（Terraform／ECS Fargate＋ALB＋RDS＋ECR＋VPC＋Flask）
 
 ---
 
@@ -49,7 +49,7 @@ Terraform（IaC管理）
 
 ## 特徴
 
-- **TerraformのみでAWSインフラをフル自動構築**
+- **TerraformでAWSインフラを自動構築**
 - VPC（ネットワーク）
 - Public/Private Subnet
 - NAT Gateway
