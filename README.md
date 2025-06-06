@@ -68,27 +68,47 @@ Terraform（IaC管理）
 ```## ディレクトリ構成
 
 ecs-fargate-docker-flask-rds-iac/
+├── environments/                     # 環境ごとの設定（dev/stg/prodなどを分けられる）
+│   └── dev/                          # “開発環境（dev）”用フォルダ
+│       ├── backend.tf                # ─ Terraform State を S3 で管理する設定
+│       ├── main.tf                   # ─ 各モジュールを呼び出してリソースを一括構築するメイン定義
+│       ├── variables.tf              # ─ main.tf で使う入力変数定義（例：env, vpc_cidr など）
+│       └── terraform.tfvars          # ─ 変数の実際の値を定義（ローカル用。dev 環境向けの値）
 │
-├── environments/
-│ └── dev/
-│ ├── main.tf # 環境構築のメイン
-│ ├── variables.tf # 変数定義
-│ ├── terraform.tfvars # 変数値（ローカル）
-│ └── backend.tf # S3リモートState管理
+├── modules/                          # 再利用可能な“個別コンポーネント”をまとめたモジュール群
+│   ├── vpc/                          # ─ ネットワーク基盤
+│   │   ├── main.tf                   #    • VPC, Public/Private サブネット, IGW, NAT Gateway, ルートテーブル定義
+│   │   ├── variables.tf              #    • VPC の CIDR や AZ、サブネットの CIDR などの変数定義
+│   │   └── outputs.tf                #    • 作成した VPC ID、サブネット ID 群などの出力定義
+│   │
+│   ├── alb/                          # ─ Application Load Balancer（ALB）関連
+│   │   ├── main.tf                   #    • ALB 本体、セキュリティグループ、ターゲットグループ、リスナー定義
+│   │   ├── variables.tf              #    • 使用する VPC ID、サブネット ID 群、セキュリティグループ設定など
+│   │   └── outputs.tf                #    • ALB の DNS 名、ターゲットグループ ARN、セキュリティグループ ID など出力
+│   │
+│   ├── ecs/                          # ─ ECS Fargate サービス関連
+│   │   ├── main.tf                   #    • ECS クラスター、タスク定義（Flask via Docker）、サービス定義
+│   │   │                                （ALB と連携してコンテナを起動・スケーリング）
+│   │   ├── variables.tf              #    • VPC ID、プライベートサブネット ID、ALB セキュリティグループ ID、ターゲットグループ ARN など
+│   │   └── outputs.tf                #    • ECS クラスター名、サービス ARN、タスク定義 ARN など出力
+│   │
+│   ├── rds/                          # ─ RDS (MySQL/PostgreSQL など) 関連
+│   │   ├── main.tf                   #    • DB サブネットグループ、DB インスタンス (エンジン・バージョン・サイズ・VPC セキュリティグループなど)
+│   │   ├── variables.tf              #    • プライベートサブネット ID 群、DB インスタンスタイプ、ユーザー名/パスワード などの変数定義
+│   │   └── outputs.tf                #    • RDS エンドポイント、ポート番号、セキュリティグループ ID など出力
+│   │
+│   └── s3/                           # ─ Terraform の状態管理用バックエンド（state）・tfstate 保存先を作る（※今回の構成であれば任意）
+│       ├── main.tf                   #    • S3 バケット作成定義（tfstate 管理用）
+│       ├── variables.tf              #    • バケット名やリージョン、オプション設定など
+│       └── outputs.tf                #    • 作成した S3 バケット名・ARN など出力
 │
-├── modules/
-│ ├── vpc/ # ネットワーク基盤
-│ ├── alb/ # ロードバランサ
-│ ├── ecs/ # Fargateサービス
-│ ├── rds/ # DB
+├── myapp-python/                     # Webアプリ本体コード（Flask + Docker ベース）
+│   ├── Dockerfile                    # ─ Python Flask アプリを動かすための Docker イメージビルド定義
+│   ├── main.py                       # ─ Flask アプリ本体（簡単な Web API 例：Hello World など）
+│   └── requirements.txt              # ─ Python パッケージ依存関係（Flask、boto3 など）
 │
-├── myapp-python/
-│ ├── Dockerfile
-│ ├── main.py
-│ └── requirements.txt
-│
-└── .gitignore
-└── README.md
+├── .gitignore                        # Git 管理時に無視するファイル・フォルダ設定
+└── README.md                         # プロジェクト概要・実行手順などを記載したドキュメント
 ```
 
 
